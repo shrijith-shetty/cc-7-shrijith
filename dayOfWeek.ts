@@ -1,25 +1,30 @@
-import assert from "assert";
+const assert = require("assert");
 
-//returning perfect square till the user reuirement
-const perfectSquare = (n: number): number[] => {
-  let result: number[] = [];
-  for (let i = 1; i <= n; i++) result[i - 1] = i * i;
-  return result; //returning result in array format
-};
+/**
+ * The function is case-insensitive.
+ *
+ * @param dayName A three-letter abbreviation of the weekday (e.g., "sun", "Mon").
+ * @returns The corresponding day index (0–6), or -1 if the input is invalid.
+ */
 
-//checking whether the expected and actual output is same or different
-assert.deepEqual(
-  perfectSquare(3),
-  [1, 4, 9],
-  "1,4,9 are the first 3 perfect square",
-);
-assert.deepEqual(
-  perfectSquare(4),
-  [1, 4, 9, 16],
-  "1,4,9,16 are the first 3 perfect square",
-);
-assert.deepEqual(
-  perfectSquare(2),
-  [1, 4],
-  "1,4 are the first 3 perfect square",
-);
+function getDayOfWeek(dayName: string): number {
+  const normalized = dayName.toLowerCase();
+
+  const days: { [key: string]: number } = {
+    sun: 0,
+    mon: 1,
+    tue: 2,
+    wed: 3,
+    thu: 4,
+    fri: 5,
+    sat: 6,
+  };
+
+  return normalized in days ? days[normalized] : -1; // checks whether input is present in days if then return day of that week else return -1
+}
+
+// Verifies that the function returns the expected output
+assert.strictEqual(getDayOfWeek("sun"), 0);
+assert.strictEqual(getDayOfWeek("Mon"), 1);
+assert.strictEqual(getDayOfWeek("fri"), 5);
+assert.strictEqual(getDayOfWeek("xyz"), -1);

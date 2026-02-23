@@ -1,25 +1,20 @@
-import assert from "assert";
+const assert = require("assert");
 
-//returning perfect square till the user reuirement
+/**
+ * Generates the first n perfect square numbers.
+ *
+ * @param n The number of perfect squares to generate.
+ * @returns An array containing the first n perfect squares.
+ */
 const perfectSquare = (n: number): number[] => {
   let result: number[] = [];
-  for (let i = 1; i <= n; i++) result[i - 1] = i * i;
-  return result; //returning result in array format
+  for (let i = 0; i < n; i++) {
+    result[i] = (i + 1) * (i + 1);
+  }
+  return result;
 };
 
-//checking whether the expected and actual output is same or different
-assert.deepEqual(
-  perfectSquare(3),
-  [1, 4, 9],
-  "1,4,9 are the first 3 perfect square",
-);
-assert.deepEqual(
-  perfectSquare(4),
-  [1, 4, 9, 16],
-  "1,4,9,16 are the first 3 perfect square",
-);
-assert.deepEqual(
-  perfectSquare(2),
-  [1, 4],
-  "1,4 are the first 3 perfect square",
-);
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(perfectSquare(3), [1, 4, 9]);
+assert.deepStrictEqual(perfectSquare(4), [1, 4, 9, 16]);
+assert.deepStrictEqual(perfectSquare(2), [1, 4]);

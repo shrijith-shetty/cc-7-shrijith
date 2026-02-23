@@ -1,16 +1,22 @@
-import { deepEqual } from "assert";
+const assert = require("assert");
 
-//function will add zero in the begining if the length of given input is not match to total number of digit which the user mention
+/**
+ * Pads a number with leading zeros until it reaches the specified length.
+ *
+ * @param numb The number to be padded.
+ * @param numberOfDigits The desired total length of the resulting string.
+ * @returns A string representation of the number with leading zeros if required.
+ */
 const paddingZero = (numb: number, numberOfDigits: number): string => {
-  let duplicateNumb: string = numb.toString();
+  let stringRepOfNum = numb.toString();
 
-  while (duplicateNumb.length < numberOfDigits) {
-    duplicateNumb = "0" + duplicateNumb; // added '0' in first so 0 should be added in first not in last
+  while (stringRepOfNum.length < numberOfDigits) {
+    stringRepOfNum = "0" + stringRepOfNum;
   }
-  return duplicateNumb; //returning duplicate number in the string format;
+
+  return stringRepOfNum;
 };
 
-
-//checking whether the expected and actual output is same or different
-deepEqual(paddingZero(23, 4), "0023", "The output is 0023");
-deepEqual(paddingZero(1223, 4), "1223", "The output is 1223");
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(paddingZero(23, 4), "0023");
+assert.deepStrictEqual(paddingZero(1223, 4), "1223");

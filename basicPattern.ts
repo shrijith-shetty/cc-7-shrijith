@@ -1,12 +1,15 @@
-import { deepEqual } from "node:assert";
-//printing the 💙 using for loop in javascript
+const assert = require("assert");
+
+/**
+ * Generates a left-aligned triangular pattern using the 💙 symbol.
+ * @param n The number of rows to generate.
+ * @returns A string representing the triangular pattern, with each row separated by a newline.
+ */
 const printSymbol = (n: number): string => {
   let result = "";
-  for (let i = 0; i < 8; i++) {
-    //first for loop
+  for (let i = 0; i < n; i++) {
     let row = "";
     for (let j = 0; j < i + 1; j++) {
-      //second for loop
       row += "💙 ";
     }
     result += row.trimEnd() + "\n";
@@ -14,8 +17,8 @@ const printSymbol = (n: number): string => {
   return result;
 };
 
-//here i am checking the function is returning expected output or not using assertion (deepEqual)
-deepEqual(
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(
   printSymbol(8),
   `💙
 💙 💙
@@ -26,5 +29,13 @@ deepEqual(
 💙 💙 💙 💙 💙 💙 💙
 💙 💙 💙 💙 💙 💙 💙 💙
 `,
-  "Correct pattern",
 );
+assert.deepStrictEqual(
+  printSymbol(4),
+  `💙
+💙 💙
+💙 💙 💙
+💙 💙 💙 💙
+`,
+);
+assert.deepStrictEqual(printSymbol(0), ``);

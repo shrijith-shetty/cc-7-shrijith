@@ -1,30 +1,25 @@
-import assert, { deepEqual } from "assert";
+const assert = require("assert");
 
-//function to covnert decimal to binary
+/**
+ * Converts a decimal number to its binary representation.
+ *
+ * @param input The decimal number to convert.
+ * @returns A string representing the binary form of the input number.
+ */
 const decimalToBinary = (input: number): string => {
-  let n = Math.floor(Math.log2(input)); // took log so it's should not go more than it's size
-  let result: string = ""; // result will be stored here
+  let n = Math.floor(Math.log2(input));
+  let result: string = "";
   for (let i = n; i >= 0; i -= 1) {
-    // running the branch in reverse format
-    // console.log(n)
     if (input >= Math.pow(2, i)) {
-      result += "1"; //insert 1 if
+      result += "1";
       input -= Math.pow(2, i);
     } else {
       result += "0";
     }
   }
-  return result; //return result in string format
+  return result;
 };
 
-//checking whether the expected and actual output is same or different
-deepEqual(
-  decimalToBinary(10),
-  "1010",
-  "The binary value of decimal 10 is 1010",
-);
-deepEqual(
-  decimalToBinary(20),
-  "10100",
-  "The binary value of decimal 10 is 10100",
-);
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(decimalToBinary(10), "1010");
+assert.deepStrictEqual(decimalToBinary(20), "10100");

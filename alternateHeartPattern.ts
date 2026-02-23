@@ -1,6 +1,15 @@
-import { deepEqual } from "assert";
+const assert = require("assert");
 
-//printing the patter using for loop
+
+/**
+ * Generates a triangular pattern of alternating 💚 and 💙 symbols.
+ *
+ * Each row contains one more symbol than the previous row.
+ * Symbols alternate based on position within the row.
+ *
+ * @param n The number of rows to generate.
+ * @returns A string containing the formatted triangle pattern, with each row separated by a newline.
+ */
 const printSymbol = (n: number): string => {
   let result: string = "";
   for (let i = 0; i < n; i++) {
@@ -17,8 +26,8 @@ const printSymbol = (n: number): string => {
   return result;
 };
 
-//checking whether the expected and actual output is same or different
-deepEqual(
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(
   printSymbol(6),
   `💚
 💚 💙
@@ -27,5 +36,18 @@ deepEqual(
 💚 💙 💚 💙 💚
 💚 💙 💚 💙 💚 💙
 `,
-  "correct pattern",
+);
+assert.deepStrictEqual(printSymbol(0), ``);
+assert.deepStrictEqual(
+  printSymbol(2),
+  `💚
+💚 💙
+`,
+);
+assert.deepStrictEqual(
+  printSymbol(3),
+  `💚
+💚 💙
+💚 💙 💚
+`,
 );

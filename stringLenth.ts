@@ -1,22 +1,20 @@
-import assert from "assert";
+const assert = require("assert");
 
-//to check the length of the array without using .length function
+/**
+ *  Calculate the length of the string without using .length property.
+ * @param input the input string whose length needs to calculated.
+ * @returns the number of string in string.
+ */
 const lengthOfString = (input: string): number => {
-  let n: number = 0;
-  while (true) {
-    if (input.includes(input[n + 1])) ++n;
-    else {
-      return n > 0 ? n + 1 : n; // here done some maths so we can get exact expected output
-    }
+  let count: number = 0;
+  for (const _ of input) {
+    count++;
   }
-  return 0; // simply added to silent the compiler
+  return count;
 };
 
-//checking whether the expected and actual output is same or different
-assert.deepEqual(lengthOfString(""), 0, "For empty string the length is 0");
-assert.deepEqual(lengthOfString("abc"), 3, "For string abc the length is 3");
-assert.deepEqual(
-  lengthOfString("I am the man"),
-  12,
-  "For following string the length is 12",
-);
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(lengthOfString(""), 0);
+assert.deepStrictEqual(lengthOfString("abc"), 3);
+assert.deepStrictEqual(lengthOfString("I am the man"), 12);
+assert.deepStrictEqual(lengthOfString("🤣🤣"), 2);

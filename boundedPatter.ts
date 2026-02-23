@@ -1,7 +1,10 @@
-import { deepEqual } from "node:assert";
+const assert = require("assert");
 
-//printing the pattern using for loop
-const printSymbol = (n: number): string => {
+/**
+ * @param n The number of rows to generate.
+ * @returns A string representing the formatted triangle, with each row separated by a newline.
+ */
+const printPattern = (n: number): string => {
   let result = "";
 
   for (let i = 0; i < n; i++) {
@@ -21,9 +24,10 @@ const printSymbol = (n: number): string => {
   return result;
 };
 
-//checking whether the expected and actual output is same or different
-deepEqual(
-  printSymbol(8),
+
+// Verifies that the function returns the expected output
+assert.deepStrictEqual(
+  printPattern(8),
   `💚
 💚 💚
 💚 💙 💚
@@ -33,5 +37,16 @@ deepEqual(
 💚 💙 💙 💙 💙 💙 💚
 💚 💚 💚 💚 💚 💚 💚 💚
 `,
-  "Correct pattern",
 );
+assert.deepStrictEqual(
+  printPattern(6),
+  `💚
+💚 💚
+💚 💙 💚
+💚 💙 💙 💚
+💚 💙 💙 💙 💚
+💚 💚 💚 💚 💚 💚
+`,
+);
+
+assert.deepStrictEqual(printPattern(0), ``);
