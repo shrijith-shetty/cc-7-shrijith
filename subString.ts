@@ -11,8 +11,7 @@ const repeatingCharecters = (input: string): string => {
   }
   return result;
 };
-//printing to check the result
-console.log(repeatingCharecters("abca"));
+
 //checking whether the expected and actual output is same or different
 deepEqual(
   repeatingCharecters("abc"),

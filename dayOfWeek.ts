@@ -7,7 +7,6 @@ const perfectSquare = (n: number): number[] => {
   return result; //returning result in array format
 };
 
-console.log(perfectSquare(3));
 //checking whether the expected and actual output is same or different
 assert.deepEqual(
   perfectSquare(3),

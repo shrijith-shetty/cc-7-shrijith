@@ -17,9 +17,6 @@ const decimalToBinary = (input: number): string => {
   return result; //return result in string format
 };
 
-//printing the output
-console.log(decimalToBinary(10));
-
 //checking whether the expected and actual output is same or different
 deepEqual(
   decimalToBinary(10),

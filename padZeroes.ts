@@ -10,8 +10,6 @@ const paddingZero = (numb: number, numberOfDigits: number): string => {
   return duplicateNumb; //returning duplicate number in the string format;
 };
 
-//printing the statement
-console.log(paddingZero(234, 5));
 
 //checking whether the expected and actual output is same or different
 deepEqual(paddingZero(23, 4), "0023", "The output is 0023");

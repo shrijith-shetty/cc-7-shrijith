@@ -8,9 +8,6 @@ const sumOfArray = (array1: number[], array2: number[]): number[] => {
   return array1; // result will be sent by adding to the input array so the space can usage can be reduced
 };
 
-//printing to check the result
-console.log(sumOfArray([1, 2, 3], [1, 2, 3]));
-
 //checking whether the expected and actual output is same or different
 assert.deepEqual(
   sumOfArray([1, 2, 3], [1, 2, 3]),

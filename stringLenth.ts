@@ -12,9 +12,6 @@ const lengthOfString = (input: string): number => {
   return 0; // simply added to silent the compiler
 };
 
-//printing the statemnt
-console.log(lengthOfString("")); // => 9
-
 //checking whether the expected and actual output is same or different
 assert.deepEqual(lengthOfString(""), 0, "For empty string the length is 0");
 assert.deepEqual(lengthOfString("abc"), 3, "For string abc the length is 3");
