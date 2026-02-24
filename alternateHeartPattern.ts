@@ -10,7 +10,7 @@ const assert = require("assert");
  * @returns A string containing the formatted triangle pattern, with each row separated by a newline.
  */
 const printPattern = (n: number): string => {
-  let result: string = "";
+  let result = "";
   for (let i = 0; i < n; i++) {
     let row = "";
     for (let j = 0; j < i + 1; j++) {

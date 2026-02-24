@@ -21,3 +21,5 @@ const repeatingCharacters = (input: string): string => {
 // Verifies that the function returns the expected output
 assert.deepStrictEqual(repeatingCharacters("abc"), "abc");
 assert.deepStrictEqual(repeatingCharacters("Terminal"), "Terminal");
+assert.deepStrictEqual(repeatingCharacters("assignment"), "as");
+assert.deepStrictEqual(repeatingCharacters("I am shrijith"), "I am");
