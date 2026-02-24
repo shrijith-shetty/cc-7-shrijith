@@ -7,19 +7,24 @@ const assert = require("assert");
  * @returns A string representing the binary form of the input number.
  */
 const decimalToBinary = (input: number): string => {
-  let n = Math.floor(Math.log2(input));
-  let result: string = "";
+  let num = Math.abs(input);
+  let n = Math.floor(Math.log2(num));
+  let result = "";
+
   for (let i = n; i >= 0; i -= 1) {
-    if (input >= Math.pow(2, i)) {
+    if (num >= Math.pow(2, i)) {
       result += "1";
-      input -= Math.pow(2, i);
+      num -= Math.pow(2, i);
     } else {
       result += "0";
     }
   }
-  return result;
+
+  return input < 0 ? "-" + result : result;
 };
 
 // Verifies that the function returns the expected output
 assert.deepStrictEqual(decimalToBinary(10), "1010");
 assert.deepStrictEqual(decimalToBinary(20), "10100");
+assert.deepStrictEqual(decimalToBinary(-20), "-10100");
+assert.deepStrictEqual(decimalToBinary(-40), "-101000");

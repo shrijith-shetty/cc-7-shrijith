@@ -18,3 +18,7 @@ const perfectSquare = (n: number): number[] => {
 assert.deepStrictEqual(perfectSquare(3), [1, 4, 9]);
 assert.deepStrictEqual(perfectSquare(4), [1, 4, 9, 16]);
 assert.deepStrictEqual(perfectSquare(2), [1, 4]);
+assert.deepStrictEqual(
+  perfectSquare(10),
+  [1, 4, 9, 16, 25, 36, 49, 64, 81, 100],
+);

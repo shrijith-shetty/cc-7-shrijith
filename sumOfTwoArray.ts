@@ -25,4 +25,11 @@ const sumOfArray = (array1: number[], array2: number[]): number[] => {
 
 //Verify that the function returns expected output
 assert.deepStrictEqual(sumOfArray([1, 2, 3], [1, 2, 3]), [2, 4, 6]);
-assert.deepStrictEqual(sumOfArray([1, 4, 3], [1, 2, 3]), [2, 6, 6]);
+assert.deepStrictEqual(sumOfArray([1, 4, 3], [1, 2, 3, 5]), [2, 6, 6, 5]);
+assert.deepStrictEqual(
+  sumOfArray([1, 4, 3, 10, 12], [1, 2, 3, 5]),
+  [2, 6, 6, 15, 12],
+);
+assert.deepStrictEqual(sumOfArray([1, 4, 3], [1, 2, 3, 5]), [2, 6, 6, 5]);
+assert.deepStrictEqual(sumOfArray([], []), []);
+assert.deepStrictEqual(sumOfArray([1, 4, 3], []), [1, 4, 3]);

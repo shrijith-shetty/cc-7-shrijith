@@ -1,6 +1,10 @@
 const assert = require("assert");
 
 /**
+ * Generates a hollow left-aligned triangle pattern using emojis.
+ *
+ * The triangle consists of `n` rows. The first column, last column of each row,
+ * and the entire last row are filled with 💚. All inner positions are filled with 💙.
  * @param n The number of rows to generate.
  * @returns A string representing the formatted triangle, with each row separated by a newline.
  */
@@ -23,7 +27,6 @@ const printPattern = (n: number): string => {
 
   return result;
 };
-
 
 // Verifies that the function returns the expected output
 assert.deepStrictEqual(

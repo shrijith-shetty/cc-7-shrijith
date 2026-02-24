@@ -1,7 +1,10 @@
 const assert = require("assert");
 
 /**
- * The function is case-insensitive.
+ * Returns the numeric index of the given weekday.
+ *
+ * The function accepts a three-letter weekday abbreviation
+ * (case-insensitive) and maps it to its corresponding index.
  *
  * @param dayName A three-letter abbreviation of the weekday (e.g., "sun", "Mon").
  * @returns The corresponding day index (0–6), or -1 if the input is invalid.
