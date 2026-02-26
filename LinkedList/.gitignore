@@ -13,6 +13,11 @@ dist
 dist-ssr
 *.local
 index.html
+linkedList.ts
+stack.test.ts
+stack.ts
+linkedLIst.test.ts
+
 
 # Editor directories and files
 .vscode/*
