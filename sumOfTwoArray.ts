@@ -2,6 +2,7 @@ const assert = require("assert");
 
 /**
  *
+ *
  * @param array1 the first array of number
  * @param array2 the second array of number
  * @returns return the sum of two array of number

@@ -1,0 +1,20 @@
+name: Run Assignment
+
+on:
+  push:
+    branches:
+      - main
+      - assignment-set-4
+
+jobs:
+  run-code:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run assignment
+        run: node --loader ts-node/esm assignment02.ts
