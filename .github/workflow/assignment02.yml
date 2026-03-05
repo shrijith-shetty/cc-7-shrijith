@@ -1,0 +1,22 @@
+name: Assignment 02 CI
+
+on:
+  push:
+    branches: ["main", "dev", "assignment02"]
+  pull_request:
+    branches: ["main", "dev"]
+
+jobs:
+  run-assignment:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - run: npm install
+
+      - run: npx ts-node assignment02.ts
