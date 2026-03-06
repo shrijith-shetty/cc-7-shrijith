@@ -31,7 +31,7 @@ const some = (arr: number[], predict: (value: number) => boolean): boolean => {
   return true;
 };
 
-console.log(some([2, 3, 4, 5], (value) => value > 1));
+// console.log(some([2, 3, 4, 5], (value) => value > 1));
 
 const every = (
   array: number[],
@@ -41,7 +41,7 @@ const every = (
     return acc && predicate(cur);
   }, true);
 };
-console.log(every([4, 23, 42], (en) => en > 13));
+// console.log(every([4, 23, 42], (en) => en > 13));
 
 // #13
 // 1. We want to get an object that will have keys as author names, and values will be an array of their quotes.  The sample output will look something like this:
@@ -109,6 +109,7 @@ const Objects = [
   },
 ];
 
+// i
 const grouped = Objects.reduce(
   (acc: Record<string, string[]>, { author, text }) => {
     if (acc[author] == null) {
@@ -119,6 +120,33 @@ const grouped = Objects.reduce(
   },
   {},
 );
+
+// ii
+function getQuotesContainingWord(word: string) {
+  let result: string[] = [];
+
+  result = Objects.filter((sentence) => sentence.text.includes(word)).map(
+    (sentence) => sentence.text,
+  );
+  return result;
+}
+
+//iii
+
+function arrayOfQuaotes() {
+  let result: string[];
+  result = Objects.map((quotes) => quotes.text);
+  return result;
+}
+// console.log(arrayOfQuaotes());
+let authorName: string[] = Objects.reduce((acc: string[], author) => {
+  if (!acc.includes(author.author)) {
+    acc.push(author.author);
+  }
+  return acc;
+}, []);
+
+// console.log(authorName);
 
 //#14
 // Here is an array of employees:
@@ -190,3 +218,151 @@ const fullNameOfEmployee = employees.map((emp) => {
 
 const emailId = employees.map((emp) => emp.email);
 // console.log(emailId);
+
+// #15
+// We have an array that contains a list of objects that represent a fruit or a nut like so.
+
+let fruites = [
+  {
+    name: "Banana",
+    type: "fruit",
+    treats: [
+      "constipation",
+      "vitamin deficiency",
+      "skin issues",
+      "sleep problems",
+    ],
+    nutritions: {
+      protein: 8,
+      carbs: 40,
+      sugar: 30,
+      vitamins: 45,
+    },
+  },
+  {
+    name: "Badam",
+    type: "nut",
+    treats: ["bp", "protein deficiency", "skin issues", "sugar"],
+    nutritions: {
+      protein: 18,
+      carbs: 20,
+      sugar: 20,
+      vitamins: 65,
+    },
+  },
+  {
+    name: "Cashew",
+    type: "nut",
+    treats: ["bp", "protein deficiency", "skin issues", "bone issues"],
+    nutritions: {
+      protein: 22,
+      carbs: 22,
+      vitamins: 60,
+    },
+  },
+  {
+    name: "Wallnut",
+    type: "nut",
+    treats: ["bp", "protein deficiency", "skin issues", "bone issues"],
+    nutritions: {
+      protein: 33,
+      carbs: 26,
+      vitamins: 64,
+    },
+  },
+  {
+    name: "Apple",
+    type: "fruit",
+    treats: ["heart problems", "skin issues", "bone issues", "migraine"],
+    nutritions: {
+      protein: 22,
+      carbs: 22,
+      vitamins: 60,
+    },
+  },
+];
+
+// Write a function that will generate an object that will contain a key for each nutrition, and the value should be a fruit or nut that has highest content of that nutrition. If there is a tie, choose  the first one.
+const highestNutrition = (nutritions: { [key: string]: number }) => {
+  let highestFruit = "";
+  let highestValue: number = 0;
+  for (let [fruit, value] of Object.entries(nutritions)) {
+    if (value > highestValue) {
+      highestFruit = fruit;
+      highestValue = value;
+    }
+  }
+  let result = highestFruit + " " + highestValue;
+  return result;
+};
+
+const nutritionOfFruitsOrNuts = fruites.map((fruit) => {
+  const maxNutrions = highestNutrition(fruit.nutritions);
+  const fruitName = fruit.name;
+
+  return { fruitName: maxNutrions };
+});
+
+// Get an array of all unique nutritions that are present in all the fruits and nuts above
+
+const allNutrition = fruites.reduce((acc: string[], fruite) => {
+  const keys = Object.keys(fruite.nutritions);
+  keys.forEach((key) => {
+    if (!acc.includes(key)) acc.push(key);
+  });
+  return acc;
+}, []);
+
+// console.log(allNutrition);
+
+// Get an array of all unique health conditions that the fruits treat.
+const healthIssue = fruites.reduce((acc: string[], fruite) => {
+  fruite.treats.forEach((key) => {
+    if (!acc.includes(key)) acc.push(key);
+  });
+  return acc;
+}, []);
+
+// console.log(healthIssue);
+
+//Get the array of all common health conditions that are treated by  all nuts.
+const nutsNames = fruites.reduce((acc: string[], nut) => {
+  if (nut.type === "nut") acc.push(nut.name);
+  return acc;
+}, []);
+
+// console.log(nutsNames);
+
+// Get a modified array of the fruits and nuts, where a new key called, totalNutritions get added to each object.  Total nutritions is nothing but the total of the values of the nutritions keys.
+const totalNutri = (nutrition: number[]) => {
+  return nutrition.reduce((acc, nutri) => acc + nutri, 0);
+};
+
+const totalNutritionObject = fruites.map((fruit) => {
+  const totalNutritionValue = totalNutri(Object.values(fruit.nutritions));
+
+  return {
+    ...fruit,
+    totalNutritions: totalNutritionValue,
+  };
+});
+
+// console.log(totalNutritionObject);
+
+// Find the total nutrition value of all fruits and nuts
+const totalNutrition = fruites.reduce((acc, fruit) => {
+  const total = Object.values(fruit.nutritions).reduce(
+    (sum, value) => sum + value,
+    0,
+  );
+  return acc + total;
+}, 0);
+
+// console.log(totalNutrition);
+
+const solveBoneIssue = fruites.map((fruit)=>{
+  const treats = Object.values(fruit.treats).reduce(
+    (name, value)=>value.includes()
+  )
+
+})
