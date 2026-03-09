@@ -23,4 +23,4 @@ jobs:
         run: npm install
 
       - name: Run TypeScript
-        run: npx ts-node index.ts
+        run: npx ts-node assignment02.ts
