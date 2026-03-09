@@ -1,5 +1,9 @@
-import movies from "./movies.json" with { type: "json" };
+import fs from "fs";
+import path from "path";
 import assert from "assert";
+
+const moviesPath = path.resolve("./movies.json"); // original folder
+const movies = JSON.parse(fs.readFileSync(moviesPath, "utf-8"));
 
 /**
  * #10 Food Ingredients Analysis
@@ -20,7 +24,7 @@ import assert from "assert";
 const foods = [
   { idli: ["rice", "urad", "oil", "cashew", "water"] },
   { chapathi: ["atta", "gluten", "water", "oil", "sugar"] },
-  { pizza: ["maida", "sugar", "oil", "chiili", "flakes", "sause"] },
+  { pizza: ["maida", "sugar", "oil", "chili", "flakes", "sause"] },
   { "paneer masala": ["paneer", "onion", "tomato", "garlic", "oil"] },
 ];
 
@@ -31,7 +35,7 @@ const noSugarFoods = foods
   .filter((food) => !Object.values(food)[0].includes("sugar"))
   .map((food) => Object.keys(food)[0]);
 
-assert.strictEqual(noSugarFoods.length, 2);
+assert.deepStrictEqual(noSugarFoods, ["idli", "paneer masala"]);
 assert.strictEqual(noSugarFoods[0], "idli");
 assert.strictEqual(noSugarFoods[1], "paneer masala");
 
@@ -41,11 +45,11 @@ assert.strictEqual(noSugarFoods[1], "paneer masala");
 const chilliOilFoods = foods
   .filter((food) => {
     const ingredients = Object.values(food)[0];
-    return ingredients.includes("chiili") && ingredients.includes("oil");
+    return ingredients.includes("chili") && ingredients.includes("oil");
   })
   .map((food) => Object.keys(food)[0]);
-assert.deepStrictEqual(noSugarFoods.includes("idli"), true);
-assert.deepStrictEqual(noSugarFoods.includes("paneer masala"), true);
+assert.deepStrictEqual(chilliOilFoods, ["pizza"]);
+assert.strictEqual(noSugarFoods.includes("idli"), true);
 /**
  * Generate safety status for each food
  */
@@ -58,8 +62,8 @@ const safetyStatus = foods.map((food) => {
   };
 });
 
-assert.deepStrictEqual(noSugarFoods.includes("idli"), true);
-assert.deepStrictEqual(noSugarFoods.includes("paneer masala"), true);
+assert.strictEqual(noSugarFoods.includes("idli"), true);
+assert.strictEqual(noSugarFoods.includes("paneer masala"), true);
 assert.deepStrictEqual(noSugarFoods.includes("chapathi"), false);
 
 /**
@@ -95,7 +99,7 @@ const secondLargestEleme = (inputArray: number[]): number => {
     if (value > firstLargeValue) {
       secondLargeValue = firstLargeValue;
       firstLargeValue = value;
-    } else if (secondLargeValue < value) {
+    } else if (value > secondLargeValue && value !== firstLargeValue) {
       secondLargeValue = value;
     }
   });
@@ -276,12 +280,12 @@ assert.deepStrictEqual(getQuotesContainingWord("apple"), []);
 
 // III. Get the array of quote strings
 
-function arrayOfQuaotes() {
+function arrayOfQuotes() {
   let result: string[];
   result = Objects.map((quotes) => quotes.text);
   return result;
 }
-assert.deepStrictEqual(arrayOfQuaotes(), [
+assert.deepStrictEqual(arrayOfQuotes(), [
   "Genius is one percent inspiration and ninety-nine percent perspiration.",
   "You can observe a lot just by watching.",
   "To invent, you need a good imagination and a pile of junk",
@@ -298,6 +302,7 @@ assert.deepStrictEqual(arrayOfQuaotes(), [
   "Life is change. Growth is optional. Choose wisely.",
   "You'll see it when you believe it.",
 ]);
+
 // IV. Array of all authors by removing any duplicates using reduce.
 const authors = Objects.reduce((acc: string[], quote: any) => {
   if (!acc.includes(quote.author)) {
@@ -480,13 +485,6 @@ const highestNutrition = (nutritions: { [key: string]: number }) => {
   return result;
 };
 
-const nutritionOfFruitsOrNuts = fruites.map((fruit) => {
-  const maxNutrions = highestNutrition(fruit.nutritions);
-  const fruitName = fruit.name;
-
-  return { fruitName: maxNutrions };
-});
-
 // Get an array of all unique nutritions that are present in all the fruits and nuts above
 const allNutrition = fruites.reduce((acc: string[], fruite) => {
   const keys = Object.keys(fruite.nutritions);
@@ -552,42 +550,37 @@ const maximumNutrition = fruites
   .map((fruit) => fruit.name);
 
 // Which fruits or nuts solve migraine and have vitamins greater than or equal to 60
-const solveMigrane = (treats: string[]): boolean => {
+const solveMigraine = (treats: string[]): boolean => {
   return treats.includes("migraine");
 };
 
 const resultOfVitamins = fruites
   .filter(
-    (fruit) => fruit.nutritions.vitamins >= 60 && solveMigrane(fruit.treats),
+    (fruit) => fruit.nutritions.vitamins >= 60 && solveMigraine(fruit.treats),
   )
   .map((fruit) => fruit.name);
 
 // Which fruit or nut has lowest carbs? (Ignore the fruits/nuts that don't have carbs in the first place)
-const lowerCarbs = fruites
-  .filter((fruit) => fruit.nutritions.carbs !== undefined)
-  .reduce((minFruit, fruit) => {
-    if (fruit.nutritions.carbs < minFruit.nutritions.carbs) {
-      return fruit;
-    }
-    return minFruit;
-  });
+const filteredFruits = fruites.filter((f) => f.nutritions.carbs !== undefined);
+const lowerCarbs = filteredFruits.reduce((minFruit, fruit) => {
+  return fruit.nutritions.carbs < minFruit.nutritions.carbs ? fruit : minFruit;
+}, filteredFruits[0]);
 const result = lowerCarbs.name;
 
 //What is the total amount of proteins I will end up intaking if I eat each of the nuts except nuts those do not solve sugar issues as doctor has warned that my skin will become pale in
 // case I eat such nuts?
 
-const totalAmountProtien = fruites
+const totalAmountProtein = fruites
   .filter((fruit) => fruit.treats.includes("sugar") && fruit.type === "nut")
-  .map((fruit) => fruit.name);
+  .reduce((total, fruit) => total + (fruit.nutritions.protein || 0), 0);
 
 // If I eat one fruit and nut  each from the all fruits and nuts available in the above list, what is the quantity of vitamins I will end up intaking? Doctor has asked me to avoid
 // fruit containing any sugar in it.
-const isIncludesSugar = (nutrients: Record<string, number>) => {
-  return "sugar" in nutrients;
-};
+const containsSugar = (nutrients: Record<string, number>) =>
+  "sugar" in nutrients;
 const totalVitamins = fruites
   .filter((fruit) => {
-    if (fruit.type === "fruit") return !isIncludesSugar(fruit.nutritions);
+    if (fruit.type === "fruit") return !containsSugar(fruit.nutritions);
     return fruit.type === "nut";
   })
   .reduce((total, fruit) => total + fruit.nutritions.vitamins, 0);
