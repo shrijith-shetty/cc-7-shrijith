@@ -2,11 +2,13 @@
   "name": "assignment02",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "build": "tsc",
-    "start": "node dist/assignment02.js",
-    "start:ts": "ts-node-esm assignment02.ts"
-  },
+"scripts": {
+  "build": "tsc",
+  "start": "node dist/assignment02.js",
+  "start:ts": "ts-node-esm assignment02.ts",
+  "lint": "tsc --noEmit",
+  "test:run": "vitest run"
+},
   "devDependencies": {
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3"
