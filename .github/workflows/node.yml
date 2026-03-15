@@ -2,13 +2,12 @@ name: Node CI
 
 on:
   push:
-    branches: [ main, assignment-set-4 ]
+    branches: [main, promise]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
-
+  root-project:
     runs-on: ubuntu-latest
 
     steps:
@@ -31,3 +30,23 @@ jobs:
 
       - name: Build project
         run: npm run build
+
+  linkedlist-project:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies (LinkedList)
+        run: npm install
+        working-directory: ./LinkedList
+
+      - name: Run tests (LinkedList)
+        run: npm run test
+        working-directory: ./LinkedList
