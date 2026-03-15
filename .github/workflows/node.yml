@@ -2,7 +2,7 @@ name: Node CI
 
 on:
   push:
-    branches: [main, assignment-set-4]
+    branches: [main, promise]
   pull_request:
     branches: [main]
 
