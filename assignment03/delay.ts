@@ -13,9 +13,6 @@
  */
 export function delay(milliseconds: number): Promise<undefined> {
   return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(undefined);
-      console.log(milliseconds);
-    }, milliseconds);
+    setTimeout(resolve, milliseconds);
   });
 }

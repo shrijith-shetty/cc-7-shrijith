@@ -28,12 +28,7 @@ export interface User {
 export async function getUsers(delay = 2000): Promise<User[]> {
   try {
     const response = await fetch("https://jsonplaceholder.typicode.com/users");
-
-    const users: User[] = await response.json();
-
-    await new Promise((resolve) => setTimeout(resolve, delay));
-
-    return users;
+    return await response.json();
   } catch (err) {
     throw new Error("Error fetching Users");
   }
