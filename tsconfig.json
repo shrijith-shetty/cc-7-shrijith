@@ -7,8 +7,13 @@
     "resolveJsonModule": true,
     "strict": true,
     "outDir": "./dist",
+    
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["assignment02/assignment02.ts"]
+  "scripts": {
+  "test": "node --test"
+},
+  "include": ["./assignment03/fetchData/post-browser"],
+  "exclude": ["node_modules", "./assignment02","./assignment01"]
 }

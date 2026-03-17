@@ -4,79 +4,81 @@
  */
 
 import { APIService } from "./service/APIService";
-import { cacheService } from "./service/cacheService";
+import { CacheService } from "./service/cacheService";
 import { ModelManager } from "./service/modelManager";
 import type { Post, Comments } from "./service/type";
 
-/** API service instance for network calls */
+/** @type {APIService} API instance */
 const api = new APIService();
 
-/** Cache for storing posts */
-const postCache = new cacheService<Post>();
+/** @type {CacheService<Post>} Cache for posts */
+const postCache = new CacheService<Post>();
 
-/** Cache for storing comments */
-const commentCache = new cacheService<Comments[]>();
+/** @type {CacheService<Comments[]>} Cache for comments */
+const commentCache = new CacheService<Comments[]>();
 
-/**
- * ModelManager instance
- * Acts as a single interface to fetch data (API + Cache)
- */
+/** @type {ModelManager} Data manager handling API + cache */
 const manager = new ModelManager(api, postCache, commentCache);
 
-/** Tracks current post ID */
+/** @type {number} Current post ID */
 let currentPostId = 1;
 
-/** Total number of posts available */
-let totalPosts = 10;
+/** @type {number} Total number of posts available */
+const totalPosts = 10;
 
-// HTML elements
-
-/** Post title element */
+/** @type {HTMLHeadingElement} */
 const title = document.getElementById("post-title") as HTMLHeadingElement;
 
-/** Post content element */
+/** @type {HTMLParagraphElement} */
 const content = document.getElementById("post-content") as HTMLParagraphElement;
 
-/** Post counter element */
+/** @type {HTMLSpanElement} */
 const counter = document.getElementById("counter") as HTMLSpanElement;
 
-/** Comment section container */
+/** @type {HTMLDivElement} */
 const commentSection = document.getElementById(
   "comment-section",
 ) as HTMLDivElement;
 
-/** Next button */
+/** @type {HTMLButtonElement} */
 const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
 
-/** Back button */
+/** @type {HTMLButtonElement} */
 const backBtn = document.getElementById("back-btn") as HTMLButtonElement;
 
-/** Refresh button */
+/** @type {HTMLButtonElement} */
 const refreshBtn = document.getElementById("refresh-btn") as HTMLButtonElement;
 
-/** Toggle comments button */
+/** @type {HTMLButtonElement} */
 const commentBtn = document.getElementById("comment-btn") as HTMLButtonElement;
 
+/** @type {HTMLDivElement} */
+const errorEl = document.getElementById("error-message") as HTMLDivElement;
+
 /**
- * Loads and renders a post by ID
+ * Loads and renders a post
  *
  * @param {number} id - Post ID to load
  * @returns {Promise<void>}
  */
 async function loadPost(id: number): Promise<void> {
-  const post = await manager.getPost(id);
+  // Reset UI immediately
+  errorEl.classList.add("hidden");
+  title.textContent = "Loading...";
+  content.textContent = "";
 
-  title.textContent = post.title;
-  content.textContent = post.body;
-  counter.textContent = id.toString();
-
-  // Reset comments UI
-  commentSection.classList.add("hidden");
-  commentSection.innerHTML = "";
-
-  // Disable navigation buttons at boundaries
-  backBtn.disabled = id === 1;
-  nextBtn.disabled = id === totalPosts;
+  try {
+    const post = await manager.getPost(id);
+    errorEl.classList.add("hidden");
+    title.textContent = post.title;
+    content.textContent = post.body;
+    counter.textContent = id.toString();
+  } catch (err) {
+    errorEl.textContent = "Failed to load post";
+    errorEl.classList.remove("hidden");
+    title.textContent = "";
+    content.textContent = "";
+  }
 }
 
 /**
@@ -86,44 +88,43 @@ async function loadPost(id: number): Promise<void> {
  * @returns {Promise<void>}
  */
 async function loadComments(id: number): Promise<void> {
-  const comments = await manager.getComments(id, 5);
+  try {
+    const comments: Comments[] = await manager.getComments(id, 5);
 
-  commentSection.innerHTML = "";
+    commentSection.innerHTML = "";
 
-  // Handle failure case
-  if (comments.length === 0) {
+    if (!comments || comments.length === 0) {
+      throw new Error("No comments");
+    }
+
+    comments.forEach((c) => {
+      const div = document.createElement("div");
+      div.className = "comment-box";
+
+      div.innerHTML = `
+        <div class="comment-author">${c.name}</div>
+        <div class="comment-text">${c.body}</div>
+      `;
+
+      div.addEventListener("click", () => {
+        div.classList.toggle("active");
+      });
+
+      commentSection.appendChild(div);
+    });
+
+    commentSection.classList.remove("hidden");
+  } catch {
     commentSection.innerHTML = `
       <div class="comment-error">Failed to load comments.</div>
     `;
     commentSection.classList.remove("hidden");
-    return;
   }
-
-  // Render comments
-  comments.forEach((c) => {
-    const div = document.createElement("div");
-    div.className = "comment-box";
-
-    div.innerHTML = `
-      <div class="comment-author">${c.name}</div>
-      <div class="comment-text">${c.body}</div>
-    `;
-
-    /**
-     * Toggles expanded state of a comment
-     */
-    div.addEventListener("click", () => {
-      div.classList.toggle("active");
-    });
-
-    commentSection.appendChild(div);
-  });
-
-  commentSection.classList.remove("hidden");
 }
 
 /**
- * Handles navigation to next post
+ * Event listener for "Next" button
+ * Moves to the next post if available
  */
 nextBtn.addEventListener("click", () => {
   if (currentPostId < totalPosts) {
@@ -133,7 +134,8 @@ nextBtn.addEventListener("click", () => {
 });
 
 /**
- * Handles navigation to previous post
+ * Event listener for "Back" button
+ * Moves to the previous post if available
  */
 backBtn.addEventListener("click", () => {
   if (currentPostId > 1) {
@@ -143,8 +145,8 @@ backBtn.addEventListener("click", () => {
 });
 
 /**
- * Refreshes current post by clearing cache
- * and re-fetching data
+ * Event listener for "Refresh" button
+ * Clears cache and reloads current post
  */
 refreshBtn.addEventListener("click", async () => {
   postCache.delete(`post-${currentPostId}`);
@@ -153,8 +155,8 @@ refreshBtn.addEventListener("click", async () => {
 });
 
 /**
- * Toggles comment visibility
- * Loads comments if not already visible
+ * Event listener for "Comments" button
+ * Toggles visibility of comments section
  */
 commentBtn.addEventListener("click", () => {
   if (commentSection.classList.contains("hidden")) {
