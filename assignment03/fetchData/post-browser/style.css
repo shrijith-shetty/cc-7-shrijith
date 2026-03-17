@@ -1,0 +1,256 @@
+:root {
+  /* 🎯 Main Colors */
+  --primary: #6366f1;
+  --primary-hover: #4f46e5;
+  --accent: #f472b6;
+
+  /* 🌸 Background */
+  --bg: linear-gradient(135deg, #eef2ff 0%, #fdf4ff 100%);
+
+  /* 🧊 Card */
+  --card: #ffffff;
+
+  /* 💬 Comment */
+  --comment: #f1f5ff;
+
+  /* 📝 Text */
+  --text-primary: #1e1b4b;
+  --text-secondary: #64748b;
+
+  --font-family: "Inter", sans-serif;
+}
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Body (merged into ONE clean version) */
+/* 
+ */
+
+/* App container */
+/* Keep app normal (no vertical centering here) */
+/* Body - FIXED */
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text-primary);
+
+  min-height: 100vh;
+
+  display: flex;
+  justify-content: center;
+  /* horizontal center */
+  align-items: center;
+  /* vertical center */
+}
+
+/* Title - centered & bold */
+.title {
+  font-size: 64px;
+  /* bigger like screenshot */
+  font-weight: 900;
+  width: 100%;
+  /* extra bold */
+  text-align: center;
+
+  /* Dark transparent look */
+  color: rgba(0, 0, 0, 0.6);
+
+  /* Add spacing from card */
+  margin-bottom: 40px;
+
+  /* Smooth font rendering */
+  letter-spacing: 1px;
+}
+
+/* Main Card */
+.post-box {
+  background: var(--card);
+  border-radius: 18px;
+  padding: 2.5rem 3rem;
+  width: 100%;
+  max-width: 44rem;
+
+  box-shadow: 0 10px 25px rgba(99, 102, 241, 0.15),
+    0 2px 8px rgba(0, 0, 0, 0.05);
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  position: relative;
+  transition: 0.25s ease;
+}
+
+.post-box:hover {
+  transform: translateY(-4px);
+}
+
+/* Top info */
+.top-info {
+  position: absolute;
+  top: 1.2rem;
+  right: 1.5rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+#topic {
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Post title */
+#post-title {
+  font-size: 1.9rem;
+  font-weight: 800;
+}
+
+/* Content */
+#post-content {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Buttons */
+.actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.app {
+  width: 100%;
+  max-width: 700px;
+  /* controls layout width */
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* centers children */
+}
+
+.navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Base button */
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+/* Refresh */
+#refresh-btn {
+  background: #eef2ff;
+  color: var(--text-primary);
+}
+
+#refresh-btn:hover {
+  background: #e0e7ff;
+}
+
+/* Comment */
+#comment-btn {
+  background: linear-gradient(135deg, #6366f1, #f472b6);
+  color: white;
+}
+
+#comment-btn:hover {
+  background: linear-gradient(135deg, #4f46e5, #ec4899);
+}
+
+/* Navigation buttons */
+#back-btn,
+#next-btn {
+  background: #eef2ff;
+  color: var(--text-primary);
+}
+
+#back-btn:hover,
+#next-btn:hover {
+  background: #e0e7ff;
+}
+
+/* Comments Section */
+#comment-section {
+  margin-top: 1rem;
+  border-top: 1px solid #e0e7ff;
+  padding-top: 1rem;
+
+  max-height: 18rem;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+/* Comment Box */
+.comment-box {
+  background: var(--comment);
+  padding: 1rem 1.2rem;
+  border-radius: 10px;
+  transition: 0.2s ease;
+  cursor: pointer;
+  border: 2px solid transparent;
+}
+
+.comment-box:hover {
+  background: #e0e7ff;
+}
+
+.comment-box.active {
+  background: #c7d2fe;
+  border: 2px solid var(--primary);
+  transform: scale(1.02);
+  box-shadow: 0 5px 15px rgba(99, 102, 241, 0.25);
+}
+
+/* Comment text */
+.comment-author {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: var(--primary);
+  margin-bottom: 0.2rem;
+}
+
+.comment-text {
+  font-size: 0.95rem;
+}
+
+/* Scrollbar */
+#comment-section::-webkit-scrollbar {
+  width: 6px;
+}
+
+#comment-section::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+/* Hidden */
+.hidden {
+  display: none;
+}
+
+/* Responsive */
+@media (max-width: 720px) {
+  .post-box {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+}

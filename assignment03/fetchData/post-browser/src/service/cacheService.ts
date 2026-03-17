@@ -4,20 +4,20 @@
  *
  * @template T - Type of value to be stored in the cache
  */
-export class cacheService<T> {
+export class CacheService<T> {
   /**
    * Internal Map to store cached data
    * Key: string identifier
    * Value: generic type T
    */
-  private cache = new Map<string, T>();
+  private cache: Map<string, T>;
+
+  constructor() {
+    this.cache = new Map<string, T>();
+  }
 
   /**
    * Stores a value in the cache
-   *
-   * @param {string} key - Unique key for the cached item
-   * @param {T} value - Value to be stored
-   * @returns {void}
    */
   set(key: string, value: T): void {
     this.cache.set(key, value);
@@ -25,9 +25,6 @@ export class cacheService<T> {
 
   /**
    * Retrieves a value from the cache
-   *
-   * @param {string} key - Key of the cached item
-   * @returns {T | undefined} - Cached value if found, otherwise undefined
    */
   get(key: string): T | undefined {
     return this.cache.get(key);
@@ -35,9 +32,6 @@ export class cacheService<T> {
 
   /**
    * Deletes a specific item from the cache
-   *
-   * @param {string} key - Key of the item to delete
-   * @returns {void}
    */
   delete(key: string): void {
     this.cache.delete(key);
@@ -45,10 +39,15 @@ export class cacheService<T> {
 
   /**
    * Clears all items from the cache
-   *
-   * @returns {void}
    */
   clear(): void {
     this.cache.clear();
+  }
+
+  /**
+   * Checks if a key exists
+   */
+  has(key: string): boolean {
+    return this.cache.has(key);
   }
 }

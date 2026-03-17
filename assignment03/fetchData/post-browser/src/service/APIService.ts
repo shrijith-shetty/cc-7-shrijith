@@ -52,23 +52,17 @@ export class APIService {
    * @example
    * fetchPost(1)
    */
-  async fetchPost(id: number): Promise<Post> {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}`,
-      );
+  async getPost(id: number): Promise<Post> {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${id}`,
+    );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch post");
-      }
-
-      return await response.json();
-    } catch (err) {
-      /**
-       * Normalized error for consistent handling upstream
-       */
-      throw new Error("Error fetching post");
+    // ✅ MUST THROW on failure
+    if (!response.ok) {
+      throw new Error("Failed to fetch post");
     }
+
+    return await response.json();
   }
 
   /**
@@ -82,27 +76,15 @@ export class APIService {
    * @example
    * fetchComments(1, 5)
    */
-  async fetchComments(id: number, count: number): Promise<Comment[]> {
-    try {
-      const response = await fetch(
-        `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
-      );
+  async getComments(id: number): Promise<Comment[]> {
+    const response = await fetch(
+      `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
+    );
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch comments");
-      }
-
-      const data: Comment[] = await response.json();
-
-      /**
-       * Limit the number of comments returned
-       */
-      return data.slice(0, count);
-    } catch (err) {
-      /**
-       * Normalized error for consistent handling upstream
-       */
-      throw new Error("Error fetching comments");
+    if (!response.ok) {
+      throw new Error("Failed to fetch comments");
     }
+
+    return await response.json();
   }
 }
