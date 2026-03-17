@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <title>Post Browser</title>
-    <link rel="stylesheet" href="src/style.css" />
+    <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="app">
+      <h1 class="title">Post Browser</h1>
+
       <div class="post-box">
         <!-- Top info -->
         <div class="top-info">
@@ -14,7 +16,11 @@
           <span id="counter">1</span> /
           <span id="totalCount">10</span>
         </div>
-
+        <div
+          id="error-message"
+          data-testid="error-message"
+          class="hidden"
+        ></div>
         <!-- Post content -->
         <h2 id="post-title">Sample Post Title</h2>
         <p id="post-content">
@@ -23,8 +29,8 @@
 
         <!-- Action buttons -->
         <div class="actions">
-          <button id="refresh-btn">Refresh</button>
-          <button id="comment-btn">Comments</button>
+          <button id="refresh-btn" data-testid="refresh-btn">Refresh</button>
+          <button id="comment-btn" data-testid="comment-btn">Comments</button>
         </div>
 
         <!-- Comments -->
@@ -32,12 +38,12 @@
 
         <!-- Navigation -->
         <div class="navigation">
-          <button id="back-btn">← Back</button>
-          <button id="next-btn">Next →</button>
+          <button id="next-btn" data-testid="next-btn">Next →</button>
+          <button id="back-btn" data-testid="back-btn" disabled>← Back</button>
         </div>
       </div>
     </div>
 
-    <script type="module" src="src/main.ts"></script>
+    <script type="module" src="dist/main.js"></script>
   </body>
 </html>
