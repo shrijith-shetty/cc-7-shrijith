@@ -2,9 +2,9 @@ name: Node CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, promise02]
   pull_request:
-    branches: [main]
+    branches: [main, promise02]
 
 jobs:
   root-project:

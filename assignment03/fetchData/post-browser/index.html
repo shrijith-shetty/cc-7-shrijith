@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Post Browser</title>
+    <link rel="stylesheet" href="src/style.css" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="post-box">
+        <!-- Top info -->
+        <div class="top-info">
+          <span id="topic">Post</span>
+          <span id="counter">1</span> /
+          <span id="totalCount">10</span>
+        </div>
+
+        <!-- Post content -->
+        <h2 id="post-title">Sample Post Title</h2>
+        <p id="post-content">
+          This is a sample post content. Click comments to see replies.
+        </p>
+
+        <!-- Action buttons -->
+        <div class="actions">
+          <button id="refresh-btn">Refresh</button>
+          <button id="comment-btn">Comments</button>
+        </div>
+
+        <!-- Comments -->
+        <div id="comment-section" class="hidden"></div>
+
+        <!-- Navigation -->
+        <div class="navigation">
+          <button id="back-btn">← Back</button>
+          <button id="next-btn">Next →</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="src/main.ts"></script>
+  </body>
+</html>
