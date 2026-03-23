@@ -1,107 +1,119 @@
-interface Beat {
+// Represents a single input event
+type Beat = {
   key: string;
   timestamp: number;
-}
+};
 
-interface Recording {
+// Stores all recorded beats
+type Recording = {
   beats: Beat[];
-}
+};
 
-interface ApplicationState {
-  mode:
-    | "NORMAL"
-    | "RECORDING_PROGRESS"
-    | "RECORDING_PAUSED"
-    | "PLAYBACK_PROGRESS"
-    | "PLAYBACK_PAUSED";
+// Possible states of the app
+type Mode =
+  | "NORMAL"
+  | "RECORDING_PROGRESS"
+  | "RECORDING_PAUSED"
+  | "PLAYBACK_PROGRESS"
+  | "PLAYBACK_PAUSED";
+
+// Full application state
+type ApplicationState = {
+  mode: Mode;
   recordings: Recording;
-}
+};
 
+// All supported actions
 type Action =
-  | { type: "START_RECORDING"; timestamp: number }
+  | { type: "START_RECORDING"; time: number }
   | { type: "STOP_RECORDING" }
-  | { type: "PAUSE_RECORDING"; timestamp: number }
-  | { type: "CONTINUE_RECORDING"; timestamp: number }
+  | { type: "PAUSE_RECORDING"; time: number }
+  | { type: "RESUME_RECORDING"; time: number }
   | { type: "START_PLAYBACK" }
   | { type: "STOP_PLAYBACK" }
   | { type: "PAUSE_PLAYBACK" }
-  | { type: "CONTINUE_PLAYBACK" }
-  | { type: "BEAT"; data: Beat[] };
+  | { type: "RESUME_PLAYBACK" }
+  | { type: "ADD_BEAT"; beats: Beat[] };
 
-const createStore = <S, A>(
+// Lightweight store
+function createStore<S, A>(
   initialState: S,
-  reduce: (state: S, action: A) => S,
-) => {
-  let state: S = initialState;
+  reducer: (state: S, action: A) => S,
+) {
+  let current = initialState;
 
   return {
-    dispatch(action: A): void {
-      const newState: S = reduce(state, action);
-      if (newState !== state) state = newState;
+    dispatch(action: A) {
+      current = reducer(current, action);
     },
-    currentState(): S {
-      return state;
+    getState() {
+      return current;
     },
   };
-};
+}
 
-const reducer = (state: ApplicationState, action: Action) => {
-  let newState: ApplicationState = state;
+// Helper to check allowed transitions
+const is = (current: Mode, expected: Mode) => current === expected;
+
+// Reducer logic
+function reducer(state: ApplicationState, action: Action): ApplicationState {
+  const { mode, recordings } = state;
 
   switch (action.type) {
-    case "START_RECORDING": {
-      if (newState.mode === "NORMAL")
-        newState = { ...state, mode: "RECORDING_PROGRESS" };
-      break;
-    }
-    case "STOP_RECORDING": {
-      if (newState.mode === "RECORDING_PROGRESS")
-        newState = { ...state, mode: "NORMAL" };
-      break;
-    }
-    case "PAUSE_RECORDING": {
-      if (newState.mode === "RECORDING_PROGRESS")
-        newState = { ...state, mode: "RECORDING_PAUSED" };
-      break;
-    }
-    case "CONTINUE_RECORDING": {
-      if (newState.mode === "RECORDING_PAUSED")
-        newState = { ...state, mode: "RECORDING_PROGRESS" };
-      break;
-    }
-    case "START_PLAYBACK": {
-      if (newState.mode === "NORMAL")
-        newState = { ...state, mode: "PLAYBACK_PROGRESS" };
-      break;
-    }
-    case "STOP_PLAYBACK": {
-      if (newState.mode === "PLAYBACK_PROGRESS")
-        newState = { ...state, mode: "NORMAL" };
-      break;
-    }
-    case "PAUSE_PLAYBACK": {
-      if (newState.mode === "PLAYBACK_PROGRESS")
-        newState = { ...state, mode: "PLAYBACK_PAUSED" };
-      break;
-    }
-    case "CONTINUE_PLAYBACK": {
-      if (newState.mode === "PLAYBACK_PAUSED")
-        newState = { ...state, mode: "PLAYBACK_PROGRESS" };
-      break;
-    }
-    case "BEAT": {
-      if (newState.mode === "RECORDING_PROGRESS")
-        newState = {
-          ...state,
-          recordings: {
-            ...state.recordings,
-            beats: [...state.recordings.beats, ...action.data],
-          },
-        };
-      break;
-    }
-  }
-  return newState;
-};
+    case "START_RECORDING":
+      return is(mode, "NORMAL")
+        ? { ...state, mode: "RECORDING_PROGRESS" }
+        : state;
 
-export { reducer, createStore, type ApplicationState };
+    case "STOP_RECORDING":
+      return is(mode, "RECORDING_PROGRESS")
+        ? { ...state, mode: "NORMAL" }
+        : state;
+
+    case "PAUSE_RECORDING":
+      return is(mode, "RECORDING_PROGRESS")
+        ? { ...state, mode: "RECORDING_PAUSED" }
+        : state;
+
+    case "RESUME_RECORDING":
+      return is(mode, "RECORDING_PAUSED")
+        ? { ...state, mode: "RECORDING_PROGRESS" }
+        : state;
+
+    case "START_PLAYBACK":
+      return is(mode, "NORMAL")
+        ? { ...state, mode: "PLAYBACK_PROGRESS" }
+        : state;
+
+    case "STOP_PLAYBACK":
+      return is(mode, "PLAYBACK_PROGRESS")
+        ? { ...state, mode: "NORMAL" }
+        : state;
+
+    case "PAUSE_PLAYBACK":
+      return is(mode, "PLAYBACK_PROGRESS")
+        ? { ...state, mode: "PLAYBACK_PAUSED" }
+        : state;
+
+    case "RESUME_PLAYBACK":
+      return is(mode, "PLAYBACK_PAUSED")
+        ? { ...state, mode: "PLAYBACK_PROGRESS" }
+        : state;
+
+    case "ADD_BEAT":
+      return is(mode, "RECORDING_PROGRESS")
+        ? {
+            ...state,
+            recordings: {
+              ...recordings,
+              beats: [...recordings.beats, ...action.beats],
+            },
+          }
+        : state;
+
+    default:
+      return state;
+  }
+}
+
+export { createStore, reducer, type ApplicationState };
