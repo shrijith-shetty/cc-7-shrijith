@@ -21,29 +21,35 @@
           data-testid="error-message"
           class="hidden"
         ></div>
+
+        <!-- Loader -->
+        <div id="post-loader" class="loader hidden">Loading...</div>
+
         <!-- Post content -->
-        <h2 id="post-title">Sample Post Title</h2>
-        <p id="post-content">
-          This is a sample post content. Click comments to see replies.
-        </p>
+        <div id="post-text-content">
+          <h2 id="post-title">Sample Post Title</h2>
+          <p id="post-content">
+            This is a sample post content. Click comments to see replies.
+          </p>
+        </div>
 
         <!-- Action buttons -->
         <div class="actions">
           <button id="refresh-btn" data-testid="refresh-btn">Refresh</button>
-          <button id="comment-btn" data-testid="comment-btn">Comments</button>
+          <button id="comments-btn" data-testid="comments-btn">Comments</button>
         </div>
 
         <!-- Comments -->
-        <div id="comment-section" class="hidden"></div>
+        <div id="comments-container" class="hidden"></div>
 
         <!-- Navigation -->
         <div class="navigation">
           <button id="next-btn" data-testid="next-btn">Next →</button>
-          <button id="back-btn" data-testid="back-btn" disabled>← Back</button>
+          <button id="prev-btn" data-testid="prev-btn">← Back</button>
         </div>
       </div>
     </div>
 
-    <script type="module" src="dist/main.js"></script>
+    <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

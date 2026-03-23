@@ -161,29 +161,29 @@ button {
 }
 
 /* Comment */
-#comment-btn {
+#comments-btn {
   background: linear-gradient(135deg, #6366f1, #f472b6);
   color: white;
 }
 
-#comment-btn:hover {
+#comments-btn:hover {
   background: linear-gradient(135deg, #4f46e5, #ec4899);
 }
 
 /* Navigation buttons */
-#back-btn,
+#prev-btn,
 #next-btn {
   background: #eef2ff;
   color: var(--text-primary);
 }
 
-#back-btn:hover,
+#prev-btn:hover,
 #next-btn:hover {
   background: #e0e7ff;
 }
 
 /* Comments Section */
-#comment-section {
+#comments-container {
   margin-top: 1rem;
   border-top: 1px solid #e0e7ff;
   padding-top: 1rem;
@@ -230,17 +230,40 @@ button {
 }
 
 /* Scrollbar */
-#comment-section::-webkit-scrollbar {
+#comments-container::-webkit-scrollbar {
   width: 6px;
 }
 
-#comment-section::-webkit-scrollbar-thumb {
+#comments-container::-webkit-scrollbar-thumb {
   background: var(--primary);
   border-radius: 4px;
 }
 
+/* Loader */
+#post-loader {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    opacity: 0.6;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 /* Hidden */
 .hidden {
+  display: none !important;
+}
+
+loader {
   display: none;
 }
 

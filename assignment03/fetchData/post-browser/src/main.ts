@@ -36,21 +36,31 @@ const content = document.getElementById("post-content") as HTMLParagraphElement;
 const counter = document.getElementById("counter") as HTMLSpanElement;
 
 /** @type {HTMLDivElement} */
-const commentSection = document.getElementById(
-  "comment-section",
+const postContent = document.getElementById(
+  "post-text-content",
+) as HTMLDivElement;
+
+/** @type {HTMLDivElement} */
+const loader = document.getElementById("post-loader") as HTMLDivElement;
+
+/** @type {HTMLDivElement} */
+const commentsContainer = document.getElementById(
+  "comments-container",
 ) as HTMLDivElement;
 
 /** @type {HTMLButtonElement} */
 const nextBtn = document.getElementById("next-btn") as HTMLButtonElement;
 
 /** @type {HTMLButtonElement} */
-const backBtn = document.getElementById("back-btn") as HTMLButtonElement;
+const prevBtn = document.getElementById("prev-btn") as HTMLButtonElement;
 
 /** @type {HTMLButtonElement} */
 const refreshBtn = document.getElementById("refresh-btn") as HTMLButtonElement;
 
 /** @type {HTMLButtonElement} */
-const commentBtn = document.getElementById("comment-btn") as HTMLButtonElement;
+const commentsBtn = document.getElementById(
+  "comments-btn",
+) as HTMLButtonElement;
 
 /** @type {HTMLDivElement} */
 const errorEl = document.getElementById("error-message") as HTMLDivElement;
@@ -62,18 +72,21 @@ const errorEl = document.getElementById("error-message") as HTMLDivElement;
  * @returns {Promise<void>}
  */
 async function loadPost(id: number): Promise<void> {
-  // Reset UI immediately
+  // Show loader and reset UI
+  loader.classList.remove("hidden");
   errorEl.classList.add("hidden");
   title.textContent = "Loading...";
   content.textContent = "";
 
   try {
     const post = await manager.getPost(id);
+    loader.classList.add("hidden");
     errorEl.classList.add("hidden");
     title.textContent = post.title;
     content.textContent = post.body;
     counter.textContent = id.toString();
   } catch (err) {
+    loader.classList.add("hidden");
     errorEl.textContent = "Failed to load post";
     errorEl.classList.remove("hidden");
     title.textContent = "";
@@ -91,7 +104,7 @@ async function loadComments(id: number): Promise<void> {
   try {
     const comments: Comments[] = await manager.getComments(id, 5);
 
-    commentSection.innerHTML = "";
+    commentsContainer.innerHTML = "";
 
     if (!comments || comments.length === 0) {
       throw new Error("No comments");
@@ -110,15 +123,15 @@ async function loadComments(id: number): Promise<void> {
         div.classList.toggle("active");
       });
 
-      commentSection.appendChild(div);
+      commentsContainer.appendChild(div);
     });
 
-    commentSection.classList.remove("hidden");
+    commentsContainer.classList.remove("hidden");
   } catch {
-    commentSection.innerHTML = `
+    commentsContainer.innerHTML = `
       <div class="comment-error">Failed to load comments.</div>
     `;
-    commentSection.classList.remove("hidden");
+    commentsContainer.classList.remove("hidden");
   }
 }
 
@@ -137,7 +150,7 @@ nextBtn.addEventListener("click", () => {
  * Event listener for "Back" button
  * Moves to the previous post if available
  */
-backBtn.addEventListener("click", () => {
+prevBtn.addEventListener("click", () => {
   if (currentPostId > 1) {
     currentPostId--;
     loadPost(currentPostId);
@@ -158,11 +171,11 @@ refreshBtn.addEventListener("click", async () => {
  * Event listener for "Comments" button
  * Toggles visibility of comments section
  */
-commentBtn.addEventListener("click", () => {
-  if (commentSection.classList.contains("hidden")) {
+commentsBtn.addEventListener("click", () => {
+  if (commentsContainer.classList.contains("hidden")) {
     loadComments(currentPostId);
   } else {
-    commentSection.classList.add("hidden");
+    commentsContainer.classList.add("hidden");
   }
 });
 

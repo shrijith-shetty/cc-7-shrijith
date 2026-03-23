@@ -1,39 +1,4 @@
-/**
- * Represents a blog post returned from the API.
- */
-export interface Post {
-  /** ID of the user who created the post */
-  userId: number;
-
-  /** Unique identifier of the post */
-  id: number;
-
-  /** Title of the post */
-  title: string;
-
-  /** Main content/body of the post */
-  body: string;
-}
-
-/**
- * Represents a comment on a post.
- */
-export interface Comment {
-  /** ID of the post this comment belongs to */
-  postId: number;
-
-  /** Unique identifier of the comment */
-  id: number;
-
-  /** Name of the commenter */
-  name: string;
-
-  /** Email address of the commenter */
-  email: string;
-
-  /** Content/body of the comment */
-  body: string;
-}
+import type { Post, Comments } from "./type";
 
 /**
  * Service responsible for making API calls to fetch posts and comments
@@ -76,7 +41,7 @@ export class APIService {
    * @example
    * fetchComments(1, 5)
    */
-  async getComments(id: number): Promise<Comment[]> {
+  async getComments(id: number): Promise<Comments[]> {
     const response = await fetch(
       `https://jsonplaceholder.typicode.com/posts/${id}/comments`,
     );
