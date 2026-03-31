@@ -1,4 +1,4 @@
-import { timeStamp } from "node:console";
+import { time, timeStamp } from "node:console";
 
 type Beat = { key: string; timestamp: number };
 type Recording = { beats: Beat[] };
@@ -40,30 +40,72 @@ class Player {
   }
   notify() {}
 
-  normalise(recording: Beat[], startIndex: number): Beat[] {
+  normalise(recording: Beat[], startIndex: number) {
     if (recording.length <= startIndex) return [];
+    let pauseValue = 0;
 
     let startTime = recording[startIndex].timestamp;
 
-    const beet: Beat[] = recording
-      .filter((l, index) => {
-        if (!(index < startIndex)) {
-          return true;
-        }
-        return false;
-      })
-      .map((l) => {
-        return {
-          key: l.key,
-          timestamp: l.timestamp - startTime,
-        };
-      });
+    // const beet: Beat[] = recording
+    //   .filter((l, index) => {
+    //     if (l.key === "PAUSE") {
+    //       pauseValue = l.timestamp;
+    //       return false;
+    //     }
+    //     if (!(index < startIndex)) {
+    //       return true;
+    //     }
+    //     return false;
+    //   })
+    //   .map((l) => {
+    //     if (pauseValue !== 0 && l.key !== "PAUSE" && beet !== undefined) {
+    //       return {
+    //         key: l.key,
+    //         timeStamp:
+    //           beet[beet.length - 1].timestamp +
+    //           (pauseValue - beet[beet.length - 1].timestamp),
+    //       };
+    //       pauseValue = 0;
+    //     } else
+    //       return {
+    //         key: l.key,
+    //         timestamp: l.timestamp - startTime,
+    //       };
+    //   });
 
     return beet;
   }
 
-  normalize(beat: Beat[]){
-    
+  normalize(beat: Beat[], currentIndex: number): Beat[] {
+    let record: Beat[] = [];
+    let pauseTime = 0;
+
+    if (beat.length <= currentIndex) return [];
+
+    let startTime = beat[currentIndex].timestamp;
+
+    for (let i = currentIndex; i < beat.length; i++) {
+      const curr = beat[i];
+
+      if (curr.key === "PAUSE") {
+        pauseTime = curr.timestamp;
+        continue;
+      }
+
+      let time = curr.timestamp - startTime;
+
+      if (pauseTime !== 0 && record.length > 0) {
+        const last = record[record.length - 1];
+        time = last.timestamp + (curr.timestamp - pauseTime);
+        pauseTime = 0;
+      }
+
+      record.push({
+        key: curr.key,
+        timestamp: time,
+      });
+    }
+    return record;
   }
 
   play() {
@@ -72,7 +114,7 @@ class Player {
     //this.normaliseBeats(this.beats);
     // 2. Create timers for all beats from beat starting current beat index onwards
     // in the timer callback, to play the beat, call `playback` that was passed in constructor.
-    this.normalize(beat)
+    this.normalize(beat, 0);
     const beats = beat;
 
     if (beats.length === 0) return;
@@ -95,12 +137,14 @@ class Player {
 const beat: Beat[] = [
   { key: "A", timestamp: Date.now() },
   { key: "F", timestamp: Date.now() + 2000 },
-  { key: "S", timestamp: Date.now() + 3000 },
-  { key: "D", timestamp: Date.now() + 4000 },
+  { key: "PAUSE", timestamp: Date.now() + 3000 },
+  { key: "D", timestamp: Date.now() + 5000 },
+  { key: "PAUSE", timestamp: Date.now() + 6000 },
+  { key: "D", timestamp: Date.now() + 8000 },
 ];
 
 const play = new Player({ beats: beat }, (b) => console.log("Playing:", b.key));
-const beet = play.normalise(beat, 1);
+const beet: Beat[] | undefined = play.normalize(beat, 1);
 
 beet.forEach((b) => {
   console.log(`${b.key}\t ${b.timestamp}`);
